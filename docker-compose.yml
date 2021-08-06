@@ -1,0 +1,7 @@
+version: '2'
+services:
+  sa-scraper-covid-thread:
+    image: jski/sa-scraper:latest
+    build:
+      dockerfile: Dockerfile
+      context: .
