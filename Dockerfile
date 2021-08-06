@@ -13,5 +13,6 @@ FROM gcr.io/distroless/python3-debian10
 LABEL MAINTAINER="jskii <blackdanieljames@gmail.com>"
 COPY --from=build-venv /venv /venv
 COPY main.py /app/main.py
+COPY .env /app/.env
 WORKDIR /app
 ENTRYPOINT ["/venv/bin/python3", "main.py"]
