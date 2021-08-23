@@ -15,4 +15,4 @@ COPY --from=build-venv /venv /venv
 COPY main.py /app/main.py
 COPY .env /app/.env
 WORKDIR /app
-ENTRYPOINT ["/venv/bin/python3", "main.py"]
+ENTRYPOINT ["/venv/bin/python3", "-u", "main.py"]
