@@ -1,4 +1,4 @@
-import requests, time, os
+import requests, time, os, re
 from bs4 import BeautifulSoup
 from urllib.parse import parse_qs
 from dotenv import load_dotenv
@@ -39,6 +39,12 @@ def get_post_content(threadid, pageid, postid):
     soup = BeautifulSoup(r.text, "html.parser")
     content = soup.find("table", {"id": "post{0}".format(postid)})
     post_text = content.find("td", {"class": "postbody"}).get_text().strip()
+    if "posted:\n" in post_text:
+        try:
+            result = re.match(r"(.*:\n)(.*)(\n\n)", post_text)
+            post_text = "```{0}```{1}".format(post_text[result.regs[0][0]:result.regs[0][1]], post_text[result.regs[0][1]:])
+        except Exception as e:
+            print(e)
     try:
         avatar_url = content.find("dd", {"class": "title"}).find("img")["src"]
     except:
@@ -61,7 +67,6 @@ while True:
 
     try:
         if last_post > old_post:
-            post = get_post_content(os.getenv('threadid'), pageid, last_post)
             print(
                 "Got new post by {0}: {1}".format(
                     post["username"], generate_link(os.getenv('threadid'), pageid, last_post)
